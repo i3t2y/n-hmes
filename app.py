@@ -3,6 +3,7 @@ import sys
 import threading
 import time
 import os
+print("[DEBUG] TELEGRAM_BOT_TOKEN present:", bool(os.environ.get("TELEGRAM_BOT_TOKEN")))
 
 # ── R2 后台同步线程 ────────────────────────────────────────
 def r2_sync_loop():
