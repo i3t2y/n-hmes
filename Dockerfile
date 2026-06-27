@@ -16,9 +16,11 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/opt/hermes/.playwright
 RUN echo "[build] Installing system deps..." && START=$(date +%s) \
   && apt-get update \
   && apt-get install -y --no-install-recommends \
-     build-essential nodejs npm python3 python3-pip python3-venv \
+     build-essential python3 python3-pip python3-venv \
      ripgrep ffmpeg gcc python3-dev libffi-dev procps \
-     git ca-certificates curl \
+     git ca-certificates curl xz-utils \
+  && curl -fsSL https://nodejs.org/dist/v22.16.0/node-v22.16.0-linux-x64.tar.xz \
+     | tar -xJ -C /usr/local --strip-components=1 \
   && rm -rf /var/lib/apt/lists/* \
   && echo "[build] System deps: $(($(date +%s) - START))s"
 
@@ -37,6 +39,7 @@ WORKDIR /opt/hermes
 
 # ── Node dependencies + Playwright + Web Dashboard build ─────────────────
 RUN echo "[build] Installing Node deps + Playwright..." && START=$(date +%s) \
+  && node --version && npm --version \
   && npm install --prefer-offline --no-audit \
   && npx playwright install --with-deps chromium --only-shell \
   && if [ -d /opt/hermes/scripts/whatsapp-bridge ]; then \
@@ -70,7 +73,7 @@ RUN mkdir -p /opt/data/cron /opt/data/sessions /opt/data/logs /opt/data/hooks \
 USER hermes
 
 # ── HermesFace scripts (persistence + entrypoint + DNS + assets) ──────
-ARG CACHE_BUST=2026-04-22-v2
+ARG CACHE_BUST=2026-06-27-v3
 RUN echo "Build: ${CACHE_BUST}"
 COPY --chown=hermes:hermes scripts /opt/data/scripts
 COPY --chown=hermes:hermes assets /opt/data/assets
