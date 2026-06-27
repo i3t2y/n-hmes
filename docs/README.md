@@ -1,5 +1,3 @@
----
-
 ### **n-hmes 项目权威架构与运维手册**
 
 **本文档是项目的唯一权威参考。任何 AI 接手本项目时，无需其他上下文，仅凭本文档即可理解架构、定位问题、提供修复建议。**
@@ -85,11 +83,22 @@ tg["extra"] = {
 | :--- | :--- | :--- |
 | `HF_TOKEN` | 访问 HF API 的令牌 | 必须具备 **Write** 权限。 |
 | `TELEGRAM_BOT_TOKEN` | Telegram Bot 令牌 | 格式为 `数字:字母串`，从 @BotFather 获取。 |
-| `DASHBOARD_PASSWORD` | 网页面板登录密码 | 必填，否则 Dashboard 拒绝启动。 |
-| `CLOUDFLARE_PROXY_URL` | Telegram 反向代理地址 | 填 TeleBridge 的 Vercel **生产域名**，不带末尾斜杠，不带 `/bot`。当前值：`https://tele-bridge-seven.vercel.app`。 |
-| `AUTO_CREATE_DATASET` | 自动创建备份库 | 建议设为 `true`。 |
-| `R2_ENDPOINT` 等 | R2 存储配置 | 若需异地备份，需配齐 Endpoint/Key/Bucket。 |
-
+| `TELEGRAM_ALLOWED_USERS` | Telegram 白名单用户 | 填写允许与 Bot 交互的 Telegram 用户 ID，逗号分隔。 |
+| `CLOUDFLARE_PROXY_URL` | Telegram 反向代理地址 | 填 TeleBridge 的 Vercel **生产域名**，不带末尾斜杠，不带 `/bot`。当前值：`https://n-hmes.vercel.app`。 |
+| `HERMES_TELEGRAM_BASE_URL` | Telegram base_url 备用覆盖 | 部分版本 Hermes 支持此变量直接覆盖 base_url，与 `CLOUDFLARE_PROXY_URL` 二选一，优先用后者。 |
+| `DASHBOARD_PASSWORD` | 网页面板登录密码 | 必填，否则 Dashboard 拒绝绑定 `0.0.0.0` 并退出。 |
+| `GATEWAY_TOKEN` | Gateway 鉴权 Token | 与 `DASHBOARD_PASSWORD` 二选一，两者均设时 `DASHBOARD_PASSWORD` 优先。 |
+| `AGENT_NAME` | Agent 显示名称 | 默认值 `HermesFace`，可自定义。 |
+| `OPENROUTER_API_KEY` | OpenRouter 模型调用密钥 | 用于接入 OpenRouter 上的各类模型。 |
+| `OPENAI_API_KEY` | OpenAI 模型调用密钥 | 用于接入 OpenAI 系列模型。 |
+| `AUTO_CREATE_DATASET` | 自动创建 HF 备份数据集 | 建议设为 `true`，首次启动时自动创建私有 dataset。 |
+| `SYNC_INTERVAL` | HF Dataset 同步间隔（秒） | 默认 `60`，当前已调整为 `3600`，减少 API 调用频率。 |
+| `TZ` | 时区设置 | 影响日志时间戳显示，如 `Asia/Shanghai`。 |
+| `R2_ENDPOINT` | Cloudflare R2 存储端点 | 格式：`https://<账户ID>.r2.cloudflarestorage.com`。 |
+| `R2_ACCESS_KEY` | R2 访问密钥 ID | 从 Cloudflare Dashboard 创建 R2 API Token 获取。 |
+| `R2_SECRET_KEY` | R2 访问密钥 Secret | 同上，创建时仅显示一次，需妥善保存。 |
+| `R2_BUCKET_NAME` | R2 存储桶名称 | 对应 Cloudflare R2 中创建的 Bucket 名。 |
+| `R2_MAX_FILES` | R2 备份文件数量上限 | 超出上限时中止同步，防止意外上传过多文件。当前触发阈值为 500。 |
 ---
 
 ### **5. TeleBridge 运维 (独立组件)**
@@ -154,34 +163,3 @@ TeleBridge 是独立部署在 Vercel 的 Node.js 项目，需单独维护。
 ---
 
 **项目状态：Telegram 通道已通过 TeleBridge 打通，Dashboard 认证已激活，R2 链路已接通，HF Dataset 持久化正常。**
-
-*最后更新：2026-06-28*
-
-以下是更新后的第 4 节完整环境变量表：
-
----
-
-### **4. 关键环境变量 (Secrets)**
-
-| 变量名 | 作用 | 备注 |
-| :--- | :--- | :--- |
-| `HF_TOKEN` | 访问 HF API 的令牌 | 必须具备 **Write** 权限。 |
-| `TELEGRAM_BOT_TOKEN` | Telegram Bot 令牌 | 格式为 `数字:字母串`，从 @BotFather 获取。 |
-| `TELEGRAM_ALLOWED_USERS` | Telegram 白名单用户 | 填写允许与 Bot 交互的 Telegram 用户 ID，逗号分隔。 |
-| `CLOUDFLARE_PROXY_URL` | Telegram 反向代理地址 | 填 TeleBridge 的 Vercel **生产域名**，不带末尾斜杠，不带 `/bot`。当前值：`https://tele-bridge-seven.vercel.app`。 |
-| `HERMES_TELEGRAM_BASE_URL` | Telegram base_url 备用覆盖 | 部分版本 Hermes 支持此变量直接覆盖 base_url，与 `CLOUDFLARE_PROXY_URL` 二选一，优先用后者。 |
-| `DASHBOARD_PASSWORD` | 网页面板登录密码 | 必填，否则 Dashboard 拒绝绑定 `0.0.0.0` 并退出。 |
-| `GATEWAY_TOKEN` | Gateway 鉴权 Token | 与 `DASHBOARD_PASSWORD` 二选一，两者均设时 `DASHBOARD_PASSWORD` 优先。 |
-| `AGENT_NAME` | Agent 显示名称 | 默认值 `HermesFace`，可自定义。 |
-| `OPENROUTER_API_KEY` | OpenRouter 模型调用密钥 | 用于接入 OpenRouter 上的各类模型。 |
-| `OPENAI_API_KEY` | OpenAI 模型调用密钥 | 用于接入 OpenAI 系列模型。 |
-| `AUTO_CREATE_DATASET` | 自动创建 HF 备份数据集 | 建议设为 `true`，首次启动时自动创建私有 dataset。 |
-| `SYNC_INTERVAL` | HF Dataset 同步间隔（秒） | 默认 `60`，当前已调整为 `3600`，减少 API 调用频率。 |
-| `TZ` | 时区设置 | 影响日志时间戳显示，如 `Asia/Shanghai`。 |
-| `R2_ENDPOINT` | Cloudflare R2 存储端点 | 格式：`https://<账户ID>.r2.cloudflarestorage.com`。 |
-| `R2_ACCESS_KEY` | R2 访问密钥 ID | 从 Cloudflare Dashboard 创建 R2 API Token 获取。 |
-| `R2_SECRET_KEY` | R2 访问密钥 Secret | 同上，创建时仅显示一次，需妥善保存。 |
-| `R2_BUCKET_NAME` | R2 存储桶名称 | 对应 Cloudflare R2 中创建的 Bucket 名。 |
-| `R2_MAX_FILES` | R2 备份文件数量上限 | 超出上限时中止同步，防止意外上传过多文件。当前触发阈值为 500。 |
-
-*内容由 AI 生成仅供参考*
