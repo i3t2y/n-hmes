@@ -54,7 +54,7 @@ USER hermes
 RUN echo "[build] Installing Python deps..." && START=$(date +%s) \
   && cd /opt/hermes \
   && uv venv \
-  && uv pip install --no-cache-dir huggingface_hub python-dotenv requests pyyaml \
+  && uv pip install --no-cache-dir huggingface_hub python-dotenv requests pyyaml boto3 \
   && uv pip install --no-cache-dir -e ".[all]" \
   && echo "[build] Python deps: $(($(date +%s) - START))s"
 
