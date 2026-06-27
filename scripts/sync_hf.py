@@ -285,8 +285,8 @@ class HermesFullSync:
                 tg = cfg.setdefault("platforms", {}).setdefault("telegram", {})
                 tg["enabled"] = True
                 tg["extra"] = {
-                    "base_url": f"{_proxy}/bot",
-                    "base_file_url": f"{_proxy}/file/bot",
+                    "base_url": f"{_proxy}",
+                    "base_file_url": f"{_proxy}/file",
                 }
                 config_path.write_text(yaml.safe_dump(cfg, default_flow_style=False))
                 print(f"[SYNC] Telegram proxy merged into config.yaml: {_proxy}/bot")
