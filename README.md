@@ -7,7 +7,7 @@ sdk: docker
 pinned: false
 license: mit
 datasets:
-  - tao-shen/HermesFace-data
+  - xxx/yyy-data
 short_description: Free always-on self-improving AI agent, no hardware required
 app_port: 7860
 tags:
