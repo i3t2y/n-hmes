@@ -20,7 +20,6 @@ RUN echo "[build] Installing system deps..." && START=$(date +%s) \
      ripgrep ffmpeg gcc python3-dev libffi-dev procps \
      git ca-certificates curl \
   && rm -rf /var/lib/apt/lists/* \
-  && pip3 install --no-cache-dir --break-system-packages huggingface_hub requests pyyaml \
   && echo "[build] System deps: $(($(date +%s) - START))s"
 
 # ── Non-root user ────────────────────────────────────────────────────────
@@ -48,15 +47,15 @@ RUN echo "[build] Installing Node deps + Playwright..." && START=$(date +%s) \
   && cd /opt/hermes && npm cache clean --force \
   && echo "[build] Node deps + web dashboard: $(($(date +%s) - START))s"
 
-# ── Python dependencies ──────────────────────────────────────────────────
+# ── Python dependencies (CRITICAL FIX) ──────────────────────────────────
 RUN chown -R hermes:hermes /opt/hermes
 USER hermes
 
 RUN echo "[build] Installing Python deps..." && START=$(date +%s) \
   && cd /opt/hermes \
   && uv venv \
-  && uv pip install --no-cache-dir -e ".[all]" \
   && uv pip install --no-cache-dir huggingface_hub python-dotenv requests pyyaml \
+  && uv pip install --no-cache-dir -e ".[all]" \
   && echo "[build] Python deps: $(($(date +%s) - START))s"
 
 USER root
