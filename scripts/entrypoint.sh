@@ -65,6 +65,7 @@ touch /opt/data/logs/app.log
 ENTRYPOINT_END=$(date +%s)
 echo "[TIMER] Entrypoint (before sync_hf.py): $((ENTRYPOINT_END - BOOT_START))s"
 
-# ── Start Hermes via sync_hf.py (handles persistence + process management)
-echo "[entrypoint] Starting Hermes Agent via sync_hf.py..."
-exec python3 -u /opt/data/scripts/sync_hf.py
+# ── Start via app.py: 先拉起 R2 后台线程，再执行 sync_hf.py ──
+echo "[entrypoint] Starting via app.py (R2 backup thread + HF Dataset sync)..."
+cd "$HERMES_HOME"
+exec python3 -u /opt/data/app.py
