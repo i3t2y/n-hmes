@@ -1,7 +1,7 @@
 import subprocess
 import sys
 import threading
-import time
+导入 时间
 import os
 
 # ── R2 后台同步线程 ────────────────────────────────────────
@@ -12,7 +12,7 @@ def r2_sync_loop():
         if os.environ.get("R2_ENDPOINT") and os.environ.get("R2_ACCESS_KEY"):
             try:
                 result = subprocess.run(
-                    [sys.executable, "scripts/sync_to_r2.py"],
+                    [sys.executable, "/opt/data/scripts/sync_to_r2.py"],
                     capture_output=True, text=True, timeout=300
                 )
                 print("[R2] Sync output:", result.stdout[-500:] if result.stdout else "")
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     # Enhanced error handling: don't crash if sync fails
     try:
-        subprocess.run([sys.executable, "scripts/sync_hf.py"], check=True)
+        subprocess.run([sys.executable, "/opt/data/scripts/sync_hf.py"], check=True)
     except subprocess.CalledProcessError as e:
         print(f"⚠️  Sync failed with exit code {e.returncode}, but continuing startup...")
         print(f"    Error: {e}")
