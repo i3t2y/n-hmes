@@ -1,7 +1,7 @@
 import subprocess
 import sys
 import threading
-导入 时间
+import time
 import os
 
 # ── R2 后台同步线程 ────────────────────────────────────────
