@@ -74,6 +74,7 @@ ARG CACHE_BUST=2026-04-22-v2
 RUN echo "Build: ${CACHE_BUST}"
 COPY --chown=hermes:hermes scripts /opt/data/scripts
 COPY --chown=hermes:hermes assets /opt/data/assets
+COPY --chown=hermes:hermes app.py /opt/data/app.py
 RUN chmod +x /opt/data/scripts/entrypoint.sh \
              /opt/data/scripts/dns-resolve.py \
              /opt/data/scripts/hermes_persist.py \
