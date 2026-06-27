@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HermesFace → Cloudflare R2 异地备份
+"HermesFace → Cloudflare R2 异地备份"
 用法: python3 scripts/sync_to_r2.py
 """
 
@@ -43,7 +43,7 @@ def sync():
     check_env()
 
     # ── 文件数量安全检查 ──────────────────────────────────
-    MAX_FILES = 500
+    MAX_FILES = 2000
     files = [f for f in SOURCE_DIR.rglob("*") if f.is_file() and not should_skip(f)]
     if len(files) > MAX_FILES:
         print(f"[R2] ✗ 文件数量异常: {len(files)} 个，超出上限 {MAX_FILES}，中止同步")
